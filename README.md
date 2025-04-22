@@ -1,73 +1,62 @@
-# Welcome to your Lovable project
 
-## Project info
+# Cerberus Access Control Demo
 
-**URL**: https://lovable.dev/projects/3bd67544-a660-4d1f-96fb-ae776bda6d24
+A demonstration of role-based access control for agent systems, showcasing a metadata-driven approach to tool access management.
 
-## How can I edit this code?
+## Project Overview
 
-There are several ways of editing your application.
+This demo illustrates a client-server access control flow:
 
-**Use Lovable**
+- **Client (React UI)**: Lets you choose a role (Student, Prefect, Teacher) and sends a "borrow request" (role, context) to the server.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3bd67544-a660-4d1f-96fb-ae776bda6d24) and start prompting.
+- **Server (Node/Express MCP)**: Registers three tools (Standard Book, Restricted Section, Cursed Scroll), applies a policy discriminator to decide which tools your role may call, executes the tool function, and returns the result.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Key Features
 
-**Use your preferred IDE**
+- **Role-Based Access Control**: Different roles have different levels of access to tools
+- **Policy Discriminator**: Central policy enforcement based on role metadata
+- **Real Tool Registration**: Each tool is implemented as a registered function
+- **Dynamic UI Feedback**: Visualizes access control decisions in real time
+- **Context Passing**: Demonstrates how context is passed through the system
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Access Policy Rules
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+This demo implements the following access control rules:
 
-Follow these steps:
+| Role    | Standard Book | Restricted Section | Cursed Scroll |
+|---------|:------------:|:------------------:|:-------------:|
+| Student | ✅            | ❌                | ❌            |
+| Prefect | ✅            | ✅                | ❌            |
+| Teacher | ✅            | ✅                | ✅            |
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Technical Implementation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- **Frontend**: React with TypeScript, Tailwind CSS
+- **Client-Side API**: Simulates server communication
+- **Role Selection**: Choose between Student, Prefect, or Teacher
+- **Tool Access**: Request access to different tools based on your role
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Getting Started
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+1. Install dependencies:
+```
+npm install
+```
+
+2. Run the development server:
+```
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+3. Open [http://localhost:8080](http://localhost:8080) to view the demo
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Why This Matters
 
-**Use GitHub Codespaces**
+This demonstration showcases a true client-server roundtrip and real access control in an agent-style system. It's a clear end-to-end example of metadata-driven gatekeeping with:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- No mocks
+- Real registered functions
+- Built-in policy logic
+- Complete separation of concerns
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/3bd67544-a660-4d1f-96fb-ae776bda6d24) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+It provides a blueprint for implementing secure access control in more complex agent systems.
