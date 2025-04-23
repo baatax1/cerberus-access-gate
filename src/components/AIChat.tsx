@@ -1,83 +1,107 @@
 
 import React, { useState } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, Send } from "lucide-react";
+import { Send } from "lucide-react";
 
-type Message = { user: "student" | "ai"; text: string };
+type Message = { user: "student" | "ai"; text: string; timestamp: number };
 
 export const AIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
-    { user: "ai", text: "👋 Hello! I am the Restricted Section Assistant. Ask me anything about Hogwarts access policies or books." },
+    { 
+      user: "ai", 
+      text: "How can I help you with access policies today?", 
+      timestamp: Date.now() 
+    }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   function handleSend() {
     if (!input.trim()) return;
-    setMessages((msgs) => [...msgs, { user: "student", text: input }]);
+    
+    // Add user message
+    const userMessage: Message = {
+      user: "student", 
+      text: input, 
+      timestamp: Date.now()
+    };
+    
+    // Add AI response
+    const aiResponse: Message = {
+      user: "ai", 
+      text: "Processing your request...", 
+      timestamp: Date.now() + 1
+    };
+    
+    setMessages(prev => [...prev, userMessage, aiResponse]);
+    setInput("");
     setIsLoading(true);
 
-    // Simulate AI reply (replace with real API later)
+    // Simulate AI response
     setTimeout(() => {
-      setMessages((msgs) => [
-        ...msgs,
-        {
+      setMessages(prev => {
+        const updatedMessages = [...prev];
+        updatedMessages[updatedMessages.length - 1] = {
           user: "ai",
-          text: "This is a demo AI assistant. Provide more integration to connect a real LLM!",
-        },
-      ]);
+          text: "Here's some information about your access policies.",
+          timestamp: Date.now()
+        };
+        return updatedMessages;
+      });
       setIsLoading(false);
     }, 1000);
-
-    setInput("");
   }
 
   return (
-    <Card className="max-w-2xl mx-auto mt-10">
-      <CardHeader className="flex flex-row gap-2 items-center pb-2">
-        <MessageCircle className="w-5 h-5 text-green-700 mr-1" />
-        <CardTitle className="text-lg font-semibold">Restricted Section Chat</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col space-y-2 min-h-[160px] max-h-64 overflow-y-auto mb-4 border rounded-md p-3 bg-gray-50">
-          {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`flex ${m.user === "student" ? "justify-end" : "justify-start"}`}
+    <Card className="w-full">
+      <CardContent className="p-4">
+        <div className="h-64 overflow-y-auto mb-4 space-y-2">
+          {messages.map((message, index) => (
+            <div 
+              key={index}
+              className={`flex ${
+                message.user === "student" ? "justify-end" : "justify-start"
+              }`}
             >
-              <span
-                className={`px-3 py-1 rounded-lg text-sm ${
-                  m.user === "student"
-                    ? "bg-primary text-white rounded-br-none"
-                    : "bg-gray-200 text-gray-800 rounded-bl-none"
+              <div 
+                className={`px-3 py-2 rounded-lg max-w-[80%] ${
+                  message.user === "student" 
+                    ? "bg-primary text-white" 
+                    : "bg-gray-100 text-gray-800"
                 }`}
               >
-                {m.text}
-              </span>
+                {message.text}
+              </div>
             </div>
           ))}
           {isLoading && (
-            <div className="text-xs italic text-gray-400">AI Assistant is typing…</div>
+            <div className="text-center text-gray-500 italic">
+              Assistant is typing...
+            </div>
           )}
         </div>
-        <form
-          className="flex gap-2"
+        <form 
           onSubmit={(e) => {
             e.preventDefault();
             handleSend();
           }}
+          className="flex space-x-2"
         >
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Type your question…"
-            disabled={isLoading}
+            placeholder="Ask about access policies..."
             className="flex-1"
+            disabled={isLoading}
           />
-          <Button type="submit" disabled={isLoading || !input.trim()} size="icon">
-            <Send className="w-4 h-4" />
+          <Button 
+            type="submit" 
+            size="icon" 
+            disabled={!input.trim() || isLoading}
+          >
+            <Send className="h-4 w-4" />
           </Button>
         </form>
       </CardContent>
