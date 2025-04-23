@@ -5,7 +5,29 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 
+// TEMPORARY: You should store your API key more securely in production!
+const OPENAI_API_KEY = "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";
+
 type Message = { user: "student" | "ai"; text: string; timestamp: number };
+
+async function fetchOpenAI(messages: { role: "system" | "user" | "assistant", content: string }[]) {
+  const result = await fetch("https://api.openai.com/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${OPENAI_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "gpt-3.5-turbo",
+      messages
+    })
+  });
+  if (!result.ok) {
+    throw new Error("Failed to fetch response from OpenAI");
+  }
+  const data = await result.json();
+  return data.choices?.[0]?.message?.content ?? "Sorry, I couldn't find an answer.";
+}
 
 export const AIChat = () => {
   const [messages, setMessages] = useState<Message[]>([
@@ -18,40 +40,42 @@ export const AIChat = () => {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  function handleSend() {
+  async function handleSend() {
     if (!input.trim()) return;
-    
-    // Add user message
+
     const userMessage: Message = {
-      user: "student", 
-      text: input, 
+      user: "student",
+      text: input,
       timestamp: Date.now()
     };
-    
-    // Add AI response
-    const aiResponse: Message = {
-      user: "ai", 
-      text: "Processing your request...", 
-      timestamp: Date.now() + 1
-    };
-    
-    setMessages(prev => [...prev, userMessage, aiResponse]);
+
+    setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
-    // Simulate AI response
-    setTimeout(() => {
-      setMessages(prev => {
-        const updatedMessages = [...prev];
-        updatedMessages[updatedMessages.length - 1] = {
-          user: "ai",
-          text: "Here's some information about your access policies.",
-          timestamp: Date.now()
-        };
-        return updatedMessages;
-      });
-      setIsLoading(false);
-    }, 1000);
+    // Create OpenAI chat history format
+    const openAIMessages = [
+      { role: "system", content: "You are a helpful assistant who helps Hogwarts students with access policies." },
+      ...messages.map(m => ({
+        role: m.user === "student" ? "user" : "assistant",
+        content: m.text
+      })),
+      { role: "user", content: input }
+    ];
+
+    try {
+      const reply = await fetchOpenAI(openAIMessages);
+      setMessages(prev => [
+        ...prev,
+        { user: "ai", text: reply, timestamp: Date.now() }
+      ]);
+    } catch (err) {
+      setMessages(prev => [
+        ...prev,
+        { user: "ai", text: "Sorry, there was an error contacting the server.", timestamp: Date.now() }
+      ]);
+    }
+    setIsLoading(false);
   }
 
   return (
