@@ -26,69 +26,74 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-gray-50 py-8">
       <div className="container mx-auto px-4 max-w-4xl">
+
         <CerberusHeader />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="md:col-span-1">
+        {/* Top section: Profile card left, controls right */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mb-10 items-start">
+          {/* Profile Card */}
+          <section>
+            <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Profile</h3>
+            <StudentBadge360
+              metadata={{
+                access_level: "special_permission",
+                approved_books: ["all_standard_texts", "advanced_magical_theory"],
+                house: "Slytherin",
+                name: "Tom Riddle",
+                prefect: true,
+                restricted_books: [
+                  "secrets_of_the_darkest_art",
+                  "moste_potente_potions",
+                  "magick_moste_evile",
+                ],
+                special_permission: {
+                  expiry: "end_of_term",
+                  granted_by: "Professor Slughorn",
+                  purpose: "academic_research",
+                },
+                wand_core: "phoenix_feather",
+                year: 7,
+              }}
+            />
+          </section>
+
+          {/* Controls */}
+          <section>
             <div className="bg-white p-6 rounded-lg shadow-sm">
               <h2 className="text-xl font-bold mb-4">Controls</h2>
               <AccessController role={role} />
               <RoleSelector selectedRole={role} onRoleChange={setRole} />
               <ContextInput context={context} onContextChange={setContext} />
-              <AccessPolicyInfo selectedRole={role} />
             </div>
-          </div>
-
-          <div className="md:col-span-2">
-            <div className="space-y-6">
-              <ToolCard
-                toolId="standardBook"
-                title="Standard Book"
-                description="Common textbooks available to all Hogwarts students."
-                onAccessAttempt={handleAccessAttempt}
-              />
-              <ToolCard
-                toolId="restrictedSection"
-                title="Restricted Section"
-                description="Books containing advanced and potentially dangerous magic."
-                onAccessAttempt={handleAccessAttempt}
-              />
-              <ToolCard
-                toolId="cursedScroll"
-                title="Cursed Scroll"
-                description="Ancient artifacts with powerful dark magic. Highly dangerous."
-                onAccessAttempt={handleAccessAttempt}
-              />
-            </div>
-          </div>
+          </section>
         </div>
 
-        {/* Start StudentBadge360 Demo */}
-        <div className="mt-12 flex flex-col items-center">
-          <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Demo</h3>
-          <StudentBadge360
-            metadata={{
-              access_level: "special_permission",
-              approved_books: ["all_standard_texts", "advanced_magical_theory"],
-              house: "Slytherin",
-              name: "Tom Riddle",
-              prefect: true,
-              restricted_books: [
-                "secrets_of_the_darkest_art",
-                "moste_potente_potions",
-                "magick_moste_evile",
-              ],
-              special_permission: {
-                expiry: "end_of_term",
-                granted_by: "Professor Slughorn",
-                purpose: "academic_research",
-              },
-              wand_core: "phoenix_feather",
-              year: 7,
-            }}
+        {/* Policy table below controls/profile */}
+        <div className="mb-8">
+          <AccessPolicyInfo selectedRole={role} />
+        </div>
+
+        {/* Tools section */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <ToolCard
+            toolId="standardBook"
+            title="Standard Book"
+            description="Common textbooks available to all Hogwarts students."
+            onAccessAttempt={handleAccessAttempt}
+          />
+          <ToolCard
+            toolId="restrictedSection"
+            title="Restricted Section"
+            description="Books containing advanced and potentially dangerous magic."
+            onAccessAttempt={handleAccessAttempt}
+          />
+          <ToolCard
+            toolId="cursedScroll"
+            title="Cursed Scroll"
+            description="Ancient artifacts with powerful dark magic. Highly dangerous."
+            onAccessAttempt={handleAccessAttempt}
           />
         </div>
-        {/* End StudentBadge360 Demo */}
 
         <div className="mt-12">
           <CerberusExplanation />
