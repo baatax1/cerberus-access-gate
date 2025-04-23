@@ -26,48 +26,51 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-4xl">
+      <div className="container mx-auto px-4 max-w-5xl">
         <CerberusHeader />
 
-        {/* Profile Card at top left */}
-        <section className="mb-8">
-          <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Profile</h3>
-          <StudentBadge360
-            metadata={{
-              access_level: "special_permission",
-              approved_books: ["all_standard_texts", "advanced_magical_theory"],
-              house: "Slytherin",
-              name: "Tom Riddle",
-              prefect: true,
-              restricted_books: [
-                "secrets_of_the_darkest_art",
-                "moste_potente_potions",
-                "magick_moste_evile",
-              ],
-              special_permission: {
-                expiry: "end_of_term",
-                granted_by: "Professor Slughorn",
-                purpose: "academic_research",
-              },
-              wand_core: "phoenix_feather",
-              year: 7,
-            }}
-          />
+        {/* Top "dashboard" area: badge/profile left, controls right */}
+        <section className="flex flex-col md:flex-row gap-8 mb-8">
+          {/* Profile on the left */}
+          <div className="w-full md:w-1/2 flex flex-col justify-start">
+            <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Profile</h3>
+            <StudentBadge360
+              metadata={{
+                access_level: "special_permission",
+                approved_books: ["all_standard_texts", "advanced_magical_theory"],
+                house: "Slytherin",
+                name: "Tom Riddle",
+                prefect: true,
+                restricted_books: [
+                  "secrets_of_the_darkest_art",
+                  "moste_potente_potions",
+                  "magick_moste_evile",
+                ],
+                special_permission: {
+                  expiry: "end_of_term",
+                  granted_by: "Professor Slughorn",
+                  purpose: "academic_research",
+                },
+                wand_core: "phoenix_feather",
+                year: 7,
+              }}
+            />
+          </div>
+
+          {/* Controls on the right */}
+          <div className="w-full md:w-1/2 flex flex-col">
+            <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
+              <h2 className="text-xl font-bold mb-4">Controls</h2>
+              <AccessController role={role} />
+              <RoleSelector selectedRole={role} onRoleChange={setRole} />
+              <ContextInput context={context} onContextChange={setContext} />
+            </div>
+          </div>
         </section>
 
-        {/* Access Policy Table */}
+        {/* Policy info below the dashboard */}
         <section className="mb-10">
           <AccessPolicyInfo selectedRole={role} />
-        </section>
-
-        {/* Controls below policy info */}
-        <section className="mb-10">
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-xl font-bold mb-4">Controls</h2>
-            <AccessController role={role} />
-            <RoleSelector selectedRole={role} onRoleChange={setRole} />
-            <ContextInput context={context} onContextChange={setContext} />
-          </div>
         </section>
 
         {/* Tools section */}
@@ -109,3 +112,4 @@ const Index = () => {
 };
 
 export default Index;
+
