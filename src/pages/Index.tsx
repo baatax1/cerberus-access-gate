@@ -26,14 +26,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-gray-50 py-8">
-      <div className="container mx-auto px-4 max-w-5xl">
-        <CerberusHeader />
-
-        {/* Top "dashboard" area: badge/profile left, controls right */}
-        <section className="flex flex-col md:flex-row gap-8 mb-8">
-          {/* Profile on the left */}
-          <div className="w-full md:w-1/2 flex flex-col justify-start">
-            <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Profile</h3>
+      <div className="container mx-auto px-4 max-w-6xl">
+        <div className="flex justify-between items-center mb-4">
+          <CerberusHeader />
+          {/* Profile badge top-right */}
+          <div className="hidden md:block">
             <StudentBadge360
               metadata={{
                 access_level: "special_permission",
@@ -56,52 +53,74 @@ const Index = () => {
               }}
             />
           </div>
-
-          {/* Controls on the right */}
-          <div className="w-full md:w-1/2 flex flex-col">
-            <div className="bg-white p-6 rounded-lg shadow-sm h-fit">
-              <h2 className="text-xl font-bold mb-4">Controls</h2>
-              <AccessController role={role} />
-              <RoleSelector selectedRole={role} onRoleChange={setRole} />
-              <ContextInput context={context} onContextChange={setContext} />
-            </div>
-          </div>
-        </section>
-
-        {/* Policy info below the dashboard */}
-        <section className="mb-10">
-          <AccessPolicyInfo selectedRole={role} />
-        </section>
-
-        {/* Tools section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <ToolCard
-            toolId="standardBook"
-            title="Standard Book"
-            description="Common textbooks available to all Hogwarts students."
-            onAccessAttempt={handleAccessAttempt}
-          />
-          <ToolCard
-            toolId="restrictedSection"
-            title="Restricted Section"
-            description="Books containing advanced and potentially dangerous magic."
-            onAccessAttempt={handleAccessAttempt}
-          />
-          <ToolCard
-            toolId="cursedScroll"
-            title="Cursed Scroll"
-            description="Ancient artifacts with powerful dark magic. Highly dangerous."
-            onAccessAttempt={handleAccessAttempt}
-          />
         </div>
-
-        {/* AI Chat Component */}
-        <AIChat />
-
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Sidebar with smaller tool cards (left) */}
+          <aside className="w-full md:w-1/3 flex flex-col gap-4">
+            <AccessPolicyInfo selectedRole={role} />
+            <div className="flex flex-col gap-3">
+              <ToolCard
+                toolId="standardBook"
+                title="Standard Book"
+                description="Common textbooks available to all Hogwarts students."
+                onAccessAttempt={handleAccessAttempt}
+              />
+              <ToolCard
+                toolId="restrictedSection"
+                title="Restricted Section"
+                description="Books containing advanced and potentially dangerous magic."
+                onAccessAttempt={handleAccessAttempt}
+              />
+              <ToolCard
+                toolId="cursedScroll"
+                title="Cursed Scroll"
+                description="Ancient artifacts with powerful dark magic. Highly dangerous."
+                onAccessAttempt={handleAccessAttempt}
+              />
+            </div>
+          </aside>
+          {/* Main content area: Chat as focal point */}
+          <main className="flex-1 flex flex-col gap-6 items-stretch">
+            {/* Show profile on mobile above chat */}
+            <div className="md:hidden mb-2">
+              <StudentBadge360
+                metadata={{
+                  access_level: "special_permission",
+                  approved_books: ["all_standard_texts", "advanced_magical_theory"],
+                  house: "Slytherin",
+                  name: "Tom Riddle",
+                  prefect: true,
+                  restricted_books: [
+                    "secrets_of_the_darkest_art",
+                    "moste_potente_potions",
+                    "magick_moste_evile",
+                  ],
+                  special_permission: {
+                    expiry: "end_of_term",
+                    granted_by: "Professor Slughorn",
+                    purpose: "academic_research",
+                  },
+                  wand_core: "phoenix_feather",
+                  year: 7,
+                }}
+              />
+            </div>
+            {/* Core AI Chat */}
+            <div className="flex-1 flex flex-col justify-center">
+              <AIChat />
+            </div>
+          </main>
+        </div>
+        {/* Controls at the very bottom */}
+        <section className="max-w-lg mx-auto mt-10 bg-white/80 shadow rounded-xl p-6 flex flex-col gap-4 border">
+          <h2 className="text-lg font-bold mb-2 text-gray-700">Manual Controls</h2>
+          <AccessController role={role} />
+          <RoleSelector selectedRole={role} onRoleChange={setRole} />
+          <ContextInput context={context} onContextChange={setContext} />
+        </section>
         <div className="mt-12">
           <CerberusExplanation />
         </div>
-
         <footer className="text-center text-gray-500 text-sm mt-12">
           <p className="mb-2">Cerberus Access Control Demonstration</p>
           <p>A metadata-driven gatekeeping system for agent tools</p>
@@ -112,4 +131,3 @@ const Index = () => {
 };
 
 export default Index;
-
