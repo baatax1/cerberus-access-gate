@@ -9,8 +9,9 @@ import { Send } from "lucide-react";
 const OPENAI_API_KEY = "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";
 
 type Message = { user: "student" | "ai"; text: string; timestamp: number };
+type OpenAIRole = "system" | "user" | "assistant";
 
-async function fetchOpenAI(messages: { role: "system" | "user" | "assistant", content: string }[]) {
+async function fetchOpenAI(messages: { role: OpenAIRole, content: string }[]) {
   const result = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -55,12 +56,12 @@ export const AIChat = () => {
 
     // Create OpenAI chat history format
     const openAIMessages = [
-      { role: "system", content: "You are a helpful assistant who helps Hogwarts students with access policies." },
+      { role: "system" as OpenAIRole, content: "You are a helpful assistant who helps Hogwarts students with access policies." },
       ...messages.map(m => ({
-        role: m.user === "student" ? "user" : "assistant",
+        role: (m.user === "student" ? "user" : "assistant") as OpenAIRole,
         content: m.text
       })),
-      { role: "user", content: input }
+      { role: "user" as OpenAIRole, content: input }
     ];
 
     try {
