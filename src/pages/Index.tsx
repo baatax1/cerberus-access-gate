@@ -9,6 +9,7 @@ import { CerberusExplanation } from "@/components/CerberusExplanation";
 import { HogwartsFooter } from "@/components/HogwartsFooter";
 import { AccessController } from "@/components/AccessController";
 import { cerberusApi, BorrowResponse, Role, Tool } from "@/api/cerberusApi";
+import { StudentBadge360 } from "@/components/StudentBadge360";
 
 const Index = () => {
   const [role, setRole] = useState<Role>("student");
@@ -62,6 +63,33 @@ const Index = () => {
           </div>
         </div>
 
+        {/* Start StudentBadge360 Demo */}
+        <div className="mt-12 flex flex-col items-center">
+          <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Demo</h3>
+          <StudentBadge360
+            metadata={{
+              access_level: "special_permission",
+              approved_books: ["all_standard_texts", "advanced_magical_theory"],
+              house: "Slytherin",
+              name: "Tom Riddle",
+              prefect: true,
+              restricted_books: [
+                "secrets_of_the_darkest_art",
+                "moste_potente_potions",
+                "magick_moste_evile",
+              ],
+              special_permission: {
+                expiry: "end_of_term",
+                granted_by: "Professor Slughorn",
+                purpose: "academic_research",
+              },
+              wand_core: "phoenix_feather",
+              year: 7,
+            }}
+          />
+        </div>
+        {/* End StudentBadge360 Demo */}
+
         <div className="mt-12">
           <CerberusExplanation />
         </div>
@@ -76,3 +104,4 @@ const Index = () => {
 };
 
 export default Index;
+
