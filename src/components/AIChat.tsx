@@ -55,15 +55,15 @@ export const AIChat = () => {
   }
 
   return (
-    <Card className="w-full">
-      <CardContent className="p-4">
-        <div className="h-64 overflow-y-auto mb-4 space-y-2">
+    <Card className="w-full h-[400px] flex flex-col">
+      <CardContent className="p-4 flex flex-col h-full">
+        <div className="flex-1 overflow-y-auto mb-4 space-y-2 pr-2">
           {messages.map((message, index) => (
             <div 
               key={index}
               className={`flex ${
                 message.user === "student" ? "justify-end" : "justify-start"
-              }`}
+              } mb-2`}
             >
               <div 
                 className={`px-3 py-2 rounded-lg max-w-[80%] ${
@@ -87,7 +87,7 @@ export const AIChat = () => {
             e.preventDefault();
             handleSend();
           }}
-          className="flex space-x-2"
+          className="flex space-x-2 mt-auto"
         >
           <Input
             value={input}
