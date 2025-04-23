@@ -10,6 +10,7 @@ import { HogwartsFooter } from "@/components/HogwartsFooter";
 import { AccessController } from "@/components/AccessController";
 import { cerberusApi, BorrowResponse, Role, Tool } from "@/api/cerberusApi";
 import { StudentBadge360 } from "@/components/StudentBadge360";
+import { AIChat } from "@/components/AIChat";
 
 const Index = () => {
   const [role, setRole] = useState<Role>("student");
@@ -26,52 +27,48 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-gray-50 py-8">
       <div className="container mx-auto px-4 max-w-4xl">
-
         <CerberusHeader />
 
-        {/* Top section: Profile card left, controls right */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-7 mb-10 items-start">
-          {/* Profile Card */}
-          <section>
-            <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Profile</h3>
-            <StudentBadge360
-              metadata={{
-                access_level: "special_permission",
-                approved_books: ["all_standard_texts", "advanced_magical_theory"],
-                house: "Slytherin",
-                name: "Tom Riddle",
-                prefect: true,
-                restricted_books: [
-                  "secrets_of_the_darkest_art",
-                  "moste_potente_potions",
-                  "magick_moste_evile",
-                ],
-                special_permission: {
-                  expiry: "end_of_term",
-                  granted_by: "Professor Slughorn",
-                  purpose: "academic_research",
-                },
-                wand_core: "phoenix_feather",
-                year: 7,
-              }}
-            />
-          </section>
+        {/* Profile Card at top left */}
+        <section className="mb-8">
+          <h3 className="text-lg font-semibold mb-3 text-gray-600">Student Badge 360 Profile</h3>
+          <StudentBadge360
+            metadata={{
+              access_level: "special_permission",
+              approved_books: ["all_standard_texts", "advanced_magical_theory"],
+              house: "Slytherin",
+              name: "Tom Riddle",
+              prefect: true,
+              restricted_books: [
+                "secrets_of_the_darkest_art",
+                "moste_potente_potions",
+                "magick_moste_evile",
+              ],
+              special_permission: {
+                expiry: "end_of_term",
+                granted_by: "Professor Slughorn",
+                purpose: "academic_research",
+              },
+              wand_core: "phoenix_feather",
+              year: 7,
+            }}
+          />
+        </section>
 
-          {/* Controls */}
-          <section>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h2 className="text-xl font-bold mb-4">Controls</h2>
-              <AccessController role={role} />
-              <RoleSelector selectedRole={role} onRoleChange={setRole} />
-              <ContextInput context={context} onContextChange={setContext} />
-            </div>
-          </section>
-        </div>
-
-        {/* Policy table below controls/profile */}
-        <div className="mb-8">
+        {/* Access Policy Table */}
+        <section className="mb-10">
           <AccessPolicyInfo selectedRole={role} />
-        </div>
+        </section>
+
+        {/* Controls below policy info */}
+        <section className="mb-10">
+          <div className="bg-white p-6 rounded-lg shadow-sm">
+            <h2 className="text-xl font-bold mb-4">Controls</h2>
+            <AccessController role={role} />
+            <RoleSelector selectedRole={role} onRoleChange={setRole} />
+            <ContextInput context={context} onContextChange={setContext} />
+          </div>
+        </section>
 
         {/* Tools section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -95,10 +92,13 @@ const Index = () => {
           />
         </div>
 
+        {/* AI Chat Component */}
+        <AIChat />
+
         <div className="mt-12">
           <CerberusExplanation />
         </div>
-        
+
         <footer className="text-center text-gray-500 text-sm mt-12">
           <p className="mb-2">Cerberus Access Control Demonstration</p>
           <p>A metadata-driven gatekeeping system for agent tools</p>
@@ -109,4 +109,3 @@ const Index = () => {
 };
 
 export default Index;
-
